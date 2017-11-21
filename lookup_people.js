@@ -13,16 +13,26 @@ const client = new pg.Client({
 });
 
 
-function getFirstOrLastName(name, cb) {
-  client.query("SELECT * FROM famous_people WHERE first_name = $1 OR last_name = $1", [name], cb);
+function getFirstName(name, cb) {
+  client.query("SELECT * FROM famous_people WHERE first_name = $1", [name], cb);
 };
 
+function getLastName(name, cb) {
+  client.query("SELECT * FROM famous_people WHERE last_name = $1", [name], cb);
+};
 
 client.connect((err) => {
   if (err) {
     return console.error("Connection Error", err);
   }
-  getFirstOrLastName(myArgs[0], (err, result) => {
+  getFirstName(myArgs[0], (err, result) => {
+    if (err) {
+      return console.error("error running query", err);
+    }
+    console.log(result.rows); 
+  });
+
+  getLastName(myArgs[0], (err, result) => {
     if (err) {
       return console.error("error running query", err);
     }
